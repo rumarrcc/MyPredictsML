@@ -1,0 +1,52 @@
+# Entornos virtuales
+.venv/
+venv/
+env/
+
+# Cache Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Variables de entorno (nunca al contenedor)
+.env
+.env.*
+.flaskenv
+
+# Credenciales y claves privadas
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_rsa.*
+id_ed25519
+id_ed25519.*
+.aws/
+credentials*
+*.tfstate
+*.tfstate.*
+
+# Tests
+tests/
+pytest.ini
+.pytest_cache/
+
+# Logs y bases de datos locales
+logs/
+*.log
+*.db
+*.sqlite3
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Docs y scripts de despliegue
+../docs/
+../scripts/

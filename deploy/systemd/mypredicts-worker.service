@@ -1,0 +1,15 @@
+[Unit]
+Description=MyPredicts Celery Worker
+After=network.target redis-server.service mypredicts-api.service
+
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/opt/mypredicts/backend
+EnvironmentFile=/etc/mypredicts/api.env
+ExecStart=/opt/mypredicts/backend/.venv/bin/celery -A app.tasks.celery_app worker --loglevel=info --queues=alerts,data,celery
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

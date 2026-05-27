@@ -1,0 +1,45 @@
+# Elastic Beanstalk package hygiene
+.git/
+.gitignore
+.dockerignore
+Dockerfile
+docker-compose.yml
+
+# Local environments and caches
+.env
+.env.*
+.flaskenv
+.venv/
+venv/
+env/
+__pycache__/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local data, logs and generated files
+logs/
+*.log
+*.db
+*.sqlite
+*.sqlite3
+instance/
+celerybeat-schedule
+celerybeat.pid
+
+# Secrets and local cloud credentials
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_rsa.*
+id_ed25519
+id_ed25519.*
+.aws/
+credentials*
+*.tfstate
+*.tfstate.*
+
+# Tests are not needed in the runtime bundle
+tests/

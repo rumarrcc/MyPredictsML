@@ -1,0 +1,99 @@
+version: "3.9"
+
+services:
+  # ── Base de datos ────────────────────────────────────────
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: stockpredictor
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Redis ────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Backend Flask ────────────────────────────────────────
+  api:
+    build: .
+    ports:
+      - "5000:5000"
+    env_file: .env
+    environment:
+      FLASK_ENV: development
+      AUTO_MIGRATE: "false"
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/stockpredictor
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+      FRONTEND_URL: http://localhost:5173
+      BACKEND_URL: http://localhost:5000
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: gunicorn "wsgi:app" --workers 2 --bind 0.0.0.0:5000 --timeout 120 --reload
+
+  # ── Celery Worker ────────────────────────────────────────
+  worker:
+    build: .
+    env_file: .env
+    environment:
+      FLASK_ENV: development
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/stockpredictor
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+    depends_on:
+      - db
+      - redis
+    healthcheck:
+      disable: true
+    command: celery -A app.tasks.celery_app worker --loglevel=info --queues=alerts,data,celery
+
+  # ── Celery Beat (scheduler) ──────────────────────────────
+  beat:
+    build: .
+    env_file: .env
+    environment:
+      FLASK_ENV: development
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/stockpredictor
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+    depends_on:
+      - redis
+    healthcheck:
+      disable: true
+    command: celery -A app.tasks.celery_app beat --loglevel=info
+
+  # ── Flower (monitor Celery) ──────────────────────────────
+  flower:
+    build: .
+    ports:
+      - "5555:5555"
+    environment:
+      CELERY_BROKER_URL: redis://redis:6379/0
+    depends_on:
+      - redis
+    command: celery -A app.tasks.celery_app flower --port=5555
+
+volumes:
+  postgres_data:

@@ -1,0 +1,176 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+img, svg, canvas, video {
+  max-width: 100%;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track, #12122a);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb, #2d2d4e);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #7c3aed;
+}
+
+[data-theme="light"] ::-webkit-scrollbar-track {
+  background: #e8eaf6;
+}
+
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: #c5cae9;
+}
+
+.js-plotly-plot .plotly .modebar {
+  background: transparent !important;
+}
+
+.js-plotly-plot .plotly .modebar-btn path {
+  fill: #555 !important;
+}
+
+.js-plotly-plot .plotly .modebar-btn:hover path {
+  fill: #aaa !important;
+}
+
+.Toastify__toast {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+}
+
+.Toastify__progress-bar {
+  background: #7c3aed;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.5);
+  cursor: pointer;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #7c3aed 30%, #2196f3 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+.MuiTableRow-root:hover {
+  background-color: rgba(124, 58, 237, 0.06) !important;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* dechever - 12/03/2026: revisé la adaptación a distintos tamaños de pantalla y corregí varios detalles visuales. */
+/* dechever - 30/04/2026: repasé estilos, textos, espaciados y formularios para que todo se viera más consistente. */
+/* rumarrcc: aire extra para que botones y chips no queden apretados en pantallas pequenas. */
+.MuiButton-root {
+  min-height: 40px;
+  white-space: normal;
+  text-wrap: balance;
+}
+
+.MuiButton-startIcon,
+.MuiButton-endIcon {
+  flex-shrink: 0;
+}
+
+.MuiTypography-root {
+  overflow-wrap: anywhere;
+}
+
+.MuiCard-root,
+.MuiCardContent-root,
+.MuiPaper-root,
+.MuiStack-root,
+.MuiGrid-root {
+  min-width: 0;
+}
+
+.MuiChip-root {
+  max-width: 100%;
+}
+
+.MuiChip-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.MuiMenuItem-root {
+  align-items: flex-start;
+  min-height: 42px;
+  white-space: normal;
+}
+
+.MuiSelect-select,
+.MuiInputBase-root,
+.MuiInputBase-input {
+  min-width: 0;
+}
+
+.MuiTableContainer-root {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+@media (max-width: 600px) {
+  .MuiDialog-paper {
+    width: calc(100% - 24px) !important;
+    margin: 12px !important;
+  }
+
+  .MuiTabs-flexContainer {
+    gap: 4px;
+  }
+
+  .MuiTab-root {
+    min-width: auto;
+    padding-inline: 12px;
+  }
+}
